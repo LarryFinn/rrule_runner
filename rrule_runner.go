@@ -1,4 +1,4 @@
-package main
+package rrule_runner
 
 import (
 	"errors"
@@ -10,15 +10,12 @@ import (
 	"time"
 )
 
-var test = cron.New(cron.WithParser(RRuleParser{}))
-
 type RRuleParser struct {
 
 }
 
 type RRuleSchedule struct {
 	rule *rrule.RRule
-
 }
 
 func (sched RRuleSchedule) Next(nextTime time.Time) time.Time {
