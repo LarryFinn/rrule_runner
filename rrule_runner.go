@@ -200,10 +200,26 @@ func (rr RRuleParser) Parse(spec string) (cron.Schedule, error) {
 }
 
 func main() {
-	sched, err := RRuleParser{}.Parse("DTSTART;TZID=America/New_York:20211003T090000\nRRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1;WKST=SA;BYDAY=MO,TU;BYMONTH=10;BYMONTHDAY=4,10;BYHOUR=1,4;BYMINUTE=0;BYSECOND=0")
+	sched, err := RRuleParser{}.Parse("DTSTART;TZID=America/New_York:20210905T090000\nRRULE:FREQ=DAILY;COUNT=30;INTERVAL=1;WKST=SU;BYDAY=MO,TU;BYHOUR=15;BYMINUTE=10;BYSECOND=0")
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		fmt.Println(sched.Next(time.Now()))
+	}
+	cronny := cron.New(cron.WithParser(RRuleParser{}))
+	id, err := cronny.AddFunc("RRULE:FREQ=DAILY;COUNT=30;INTERVAL=1;WKST=SU;BYDAY=MO,TU;BYHOUR=15;BYMINUTE=08;BYSECOND=0", func() {
+		fmt.Println("WE DID IT")
+		fmt.Println(time.Now())
+	})
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println(id)
+		cronny.Start()
+		dur, _ := time.ParseDuration("1 second")
+		for {
+
+			time.Sleep(dur)
+		}
 	}
 }
