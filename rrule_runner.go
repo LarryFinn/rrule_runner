@@ -14,6 +14,18 @@ type RRuleParser struct {
 
 }
 
+type CronOrRRuleParser struct {
+	rrParser RRuleParser
+	cronParser cron.Parser
+}
+
+func NewCronOrRRuleParser() CronOrRRuleParser {
+	return CronOrRRuleParser{
+		RRuleParser{},
+		cron.NewParser(cron.Minute | cron.Hour | cron.Dom | cron.Month | cron.Dow | cron.Descriptor),
+	}
+}
+
 type RRuleSchedule struct {
 	rule *rrule.RRule
 }
@@ -60,6 +72,14 @@ func weekdayListToSlice(weekdayList string) (result []rrule.Weekday, err error) 
 		result[index] = weekday
 	}
 	return result, err
+}
+
+func (cronOrRRule CronOrRRuleParser) Parse(spec string) (cron.Schedule, error) {
+	if strings.HasPrefix(spec, "DTSTART") || strings.HasPrefix(spec, "RRULE") {
+		return cronOrRRule.rrParser.Parse(spec)
+	} else {
+		return cronOrRRule.cronParser.Parse(spec)
+	}
 }
 
 func (rr RRuleParser) Parse(spec string) (cron.Schedule, error) {
