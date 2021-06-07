@@ -1,4 +1,4 @@
-module github.com/larryfinn/rrule-runner
+module github.com/larryfinn/rrule_runner
 
 go 1.13
 
