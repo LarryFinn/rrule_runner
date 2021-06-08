@@ -31,7 +31,7 @@ type RRuleSchedule struct {
 }
 
 func (sched RRuleSchedule) Next(nextTime time.Time) time.Time {
-	return sched.rule.After(nextTime, true)
+	return sched.rule.After(nextTime, false)
 }
 
 func numberListToSlice(numList string) (result []int, err error){
@@ -216,6 +216,7 @@ func (rr RRuleParser) Parse(spec string) (cron.Schedule, error) {
 	return RRuleSchedule{rule}, nil
 }
 
+/*
 func main() {
 	sched, err := RRuleParser{}.Parse("DTSTART;TZID=America/New_York:20210905T090000\nRRULE:FREQ=DAILY;COUNT=30;INTERVAL=1;WKST=SU;BYDAY=MO,TU;BYHOUR=15;BYMINUTE=10;BYSECOND=0")
 	if err != nil {
@@ -240,3 +241,4 @@ func main() {
 		}
 	}
 }
+*/
